@@ -1,5 +1,7 @@
 import React,{useState} from 'react';
 import PropTypes from 'prop-types';
+import InputElement from './inputElement';
+import SelectBox from './selectBox';
 
 const FlexiForm = (props)=>{  
     const [nameState,setNameState]=useState({
@@ -27,31 +29,30 @@ const FlexiForm = (props)=>{
     formconfig.forEach((item)=>
         {
             if(item.type==='TextField'){
-                inpuElem =  <div>
-                                <label>{item.label}</label>
-                                <input type='text' 
-                                name={item.name} 
-                                value={nameState.name} 
-                                placeholder='Please enter name'
-                                onChange={(e)=>{
-                                    e.preventDefault();
-                                    setNameState({...nameState,name:e.target.value});            
-                                }} />
-                            </div>; 
+                inpuElem = <InputElement
+                    inputLabel={item.label}
+                    inputType='text'
+                    inputName={item.name}
+                    inputValue={nameState.name}
+                    inputPlaceholder='Please Enter name'
+                    inputOnchange={(e)=>{
+                        e.preventDefault();
+                        setNameState({...nameState,name:e.target.value});            
+                    }}
+                /> 
             }
             if(item.type==='DropDown'){
-                selectElem=<div>
-                    <label>{item.label}</label>
-                    <select name='DropDown' 
-                    value={addressState.address}
-                    onChange={(e)=>{
+                selectElem=<SelectBox
+                    selectboxLabel={item.label}
+                    selectboxName='DropDown'
+                    selectboxValue={addressState.address}
+                    selectboxOnchange={(e)=>{
                         e.preventDefault();
                         setAddressState({...addressState,address:e.target.value});  
-                    }}>
-                    <option value=''>Please select state</option>
-                    {item.values.map((optn,index)=><option key={index} value={optn}>{optn}</option>)}
-                    </select>
-                </div>;
+                    }}
+                    selectboxPlaceholder='Please select state'
+                    optionValues={item.values}
+                />
             }
         }
     )
@@ -69,7 +70,7 @@ const FlexiForm = (props)=>{
         </div>
     )
 }
-FlexiForm.prototype={
+FlexiForm.propTypes={
     config:PropTypes.object,
     flexiCallBack:PropTypes.func
 }
